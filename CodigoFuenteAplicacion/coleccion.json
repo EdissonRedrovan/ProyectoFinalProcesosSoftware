@@ -1,0 +1,280 @@
+{
+	"info": {
+		"_postman_id": "4a4be7d3-bdc6-4433-89b3-fb9afbb3d9c2",
+		"name": "Automatizacion de Procesos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "17709986",
+		"_collection_link": "https://ciclonmore1.postman.co/workspace/BA~498d9119-bc7a-4f2d-8394-aa989c38f072/collection/17709986-4a4be7d3-bdc6-4433-89b3-fb9afbb3d9c2?action=share&source=collection_link&creator=17709986"
+	},
+	"item": [
+		{
+			"name": "Tarea_3",
+			"item": [
+				{
+					"name": "Listar",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8080/clientes/list-all"
+					},
+					"response": []
+				},
+				{
+					"name": "Transferir",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cuentaOrigen\": 1001,\n    \"cuentaDestino\": 1002,\n    \"monto\": 500,\n    \"descripcion\": \"Pago exitoso\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/transferencias/transferir"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Proyecto_Final",
+			"item": [
+				{
+					"name": "Listar Clientes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "http://localhost:8082/customers/list-all"
+					},
+					"response": [
+						{
+							"name": "Listado OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": "http://localhost:8082/customers/list-all"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "content-length",
+									"value": "902"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"nombres\": \"Juan\",\n        \"apellidos\": \"Pérez\",\n        \"cedula\": \"0102030405\",\n        \"correo\": \"juan.perez@example.com\",\n        \"telefono\": \"0987654321\",\n        \"fechaNacimiento\": \"1990-01-15T05:00:00.000+00:00\"\n    },\n    {\n        \"id\": 2,\n        \"nombres\": \"María\",\n        \"apellidos\": \"Gómez\",\n        \"cedula\": \"0203040506\",\n        \"correo\": \"maria.gomez@example.com\",\n        \"telefono\": \"0987654322\",\n        \"fechaNacimiento\": \"1985-05-20T05:00:00.000+00:00\"\n    },\n    {\n        \"id\": 3,\n        \"nombres\": \"Carlos\",\n        \"apellidos\": \"Ruiz\",\n        \"cedula\": \"0304050607\",\n        \"correo\": \"carlos.ruiz@example.com\",\n        \"telefono\": \"0987654323\",\n        \"fechaNacimiento\": \"1992-11-30T04:00:00.000+00:00\"\n    },\n    {\n        \"id\": 4,\n        \"nombres\": \"Ana\",\n        \"apellidos\": \"Martínez\",\n        \"cedula\": \"0405060708\",\n        \"correo\": \"ana.martinez@example.com\",\n        \"telefono\": \"0987654324\",\n        \"fechaNacimiento\": \"1988-03-10T05:00:00.000+00:00\"\n    },\n    {\n        \"id\": 5,\n        \"nombres\": \"Luis\",\n        \"apellidos\": \"Fernández\",\n        \"cedula\": \"0506070809\",\n        \"correo\": \"luis.fernandez@example.com\",\n        \"telefono\": \"0987654325\",\n        \"fechaNacimiento\": \"1995-07-25T05:00:00.000+00:00\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Guardado OK",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombres\": \"Juan\",\n    \"apellidos\": \"Perez\",\n    \"cedula\": \"0106487846\",\n    \"correo\": \"lcabrera@est.ups.edu.ec\",\n    \"telefono\": \"0991234567\",\n    \"fechaNacimiento\": \"1990-05-15\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/customers/save"
+					},
+					"response": [
+						{
+							"name": "Guardado OK",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombres\": \"Juan\",\n    \"apellidos\": \"Perez\",\n    \"cedula\": \"0106487846\",\n    \"correo\": \"lcabrera@est.ups.edu.ec\",\n    \"telefono\": \"0991234567\",\n    \"fechaNacimiento\": \"1990-05-15\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8082/customers/save"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "content-length",
+									"value": "176"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 6,\n    \"nombres\": \"Juan\",\n    \"apellidos\": \"Perez\",\n    \"cedula\": \"0106487846\",\n    \"correo\": \"lcabrera@est.ups.edu.ec\",\n    \"telefono\": \"0991234567\",\n    \"fechaNacimiento\": \"1990-05-15T00:00:00.000+00:00\"\n}"
+						},
+						{
+							"name": "Cedula no valida",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombres\": \"Juan\",\n    \"apellidos\": \"Perez\",\n    \"cedula\": \"01064878456\",\n    \"correo\": \"lcabrera@est.ups.edu.ec\",\n    \"telefono\": \"0991234567\",\n    \"fechaNacimiento\": \"1990-05-15\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8082/customers/save"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "content-length",
+									"value": "33"
+								}
+							],
+							"cookie": [],
+							"body": "La cedula del cliente es invalida"
+						},
+						{
+							"name": "Correo no valido",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombres\": \"Juan\",\n    \"apellidos\": \"Perez\",\n    \"cedula\": \"0106487846\",\n    \"correo\": \"lcabrerrew\",\n    \"telefono\": \"0991234567\",\n    \"fechaNacimiento\": \"1990-05-15\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8082/customers/save"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "content-length",
+									"value": "33"
+								}
+							],
+							"cookie": [],
+							"body": "El correo del cliente es invalido"
+						}
+					]
+				},
+				{
+					"name": "Actualizacion OK",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"Romel\",\n    \"apellidos\": \"Avila\",\n    \"cedula\": \"0102030405\",\n    \"correo\": \"ravila@est.ups.edu.ec\",\n    \"telefono\": \"1234567848\",\n    \"fechaNacimiento\": \"2001-12-20T05:00:00.000+00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8082/customers/update"
+					},
+					"response": [
+						{
+							"name": "Actualizacion OK",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": 1,\n    \"nombres\": \"Romel\",\n    \"apellidos\": \"Avila\",\n    \"cedula\": \"0102030405\",\n    \"correo\": \"ravila@est.ups.edu.ec\",\n    \"telefono\": \"1234567848\",\n    \"fechaNacimiento\": \"2001-12-20T05:00:00.000+00:00\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8082/customers/update"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "content-length",
+									"value": "175"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 1,\n    \"nombres\": \"Romel\",\n    \"apellidos\": \"Avila\",\n    \"cedula\": \"0102030405\",\n    \"correo\": \"ravila@est.ups.edu.ec\",\n    \"telefono\": \"1234567848\",\n    \"fechaNacimiento\": \"2001-12-20T05:00:00.000+00:00\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete OK",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:8082/customers/delete/5"
+					},
+					"response": [
+						{
+							"name": "Delete OK",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8082/customers/delete/5"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8"
+								},
+								{
+									"key": "content-length",
+									"value": "29"
+								}
+							],
+							"cookie": [],
+							"body": "Customer successfully deleted"
+						}
+					]
+				}
+			]
+		}
+	]
+}

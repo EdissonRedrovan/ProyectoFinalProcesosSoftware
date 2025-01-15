@@ -1,0 +1,41 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: db_customer
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10  
+      start_period: 30s  
+    networks:
+      - quarkus-net
+      
+  #app:
+  #  build:
+  #    context: .
+  #    dockerfile: Dockerfile
+  #  container_name: quarkus_app
+  #  ports:
+  #    - "8080:8080"
+  #  depends_on:
+  #    mysql:
+  #      condition: service_healthy
+  #  environment:
+  #    QUARKUS_DATASOURCE_JDBC_URL: jdbc:mysql://mysql:3306/db_customer
+  #    QUARKUS_DATASOURCE_USERNAME: admin
+  #    QUARKUS_DATASOURCE_PASSWORD: admin
+  #  networks:
+  #    - quarkus-net
+
+networks:
+  quarkus-net:
+    driver: bridge

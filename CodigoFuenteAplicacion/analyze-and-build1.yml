@@ -1,0 +1,125 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- master
+
+pool:
+  name: ProyectoFinal
+ 
+steps:
+  - checkout: self
+    fetchDepth: 0
+
+  - task: SonarCloudPrepare@3
+    inputs:
+      SonarQube: 'Sonar Cloud Connection'
+      organization: 'eredrovan0873'
+      scannerMode: 'other'
+      extraProperties: |
+        # Additional properties that will be passed to the scanner,
+        # Put one key=value per line, example:
+        sonar.projectKey=eredrovan0873_ProyectoFinal
+        sonar.projectName=ProyectoFinal
+
+  # Levantar servicios con Docker Compose
+  - script: |
+      echo "Levantando servicios Docker..."
+      docker-compose -f docker-compose.yaml up -d
+    displayName: 'Levantar servicio Docker Base de Datos'
+
+
+  # Construir el proyecto con Maven
+  - task: Maven@4
+    inputs:
+      mavenPomFile: 'pom.xml'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      javaHomeOption: 'path'
+      jdkDirectory: '/usr/lib/jvm/java-21-openjdk-amd64'
+      mavenOptions: '-Xmx3072m'
+      goals: 'clean package verify -Dquarkus.package.type=uber-jar'
+      effectivePomSkip: false
+      sonarQubeRunAnalysis: true
+      sqMavenPluginVersionChoice: 'latest'
+      checkStyleRunAnalysis: true
+    displayName: 'Construir proyecto Maven'
+
+  - task: SonarCloudPublish@3
+    inputs:
+      pollingTimeoutSec: '300'
+
+  - task: SnykSecurityScan@1
+    inputs:
+      testType: app
+      monitorWhen: always
+      failOnIssues: false
+      serviceConnectionEndpoint: Snyk Connection Test
+      
+  - task: Bash@3
+    name: "Build_Docker_image"
+    inputs:
+      targetType: 'inline'
+      script: |
+        docker build -f Dockerfile.api -t miapp:$(Build.BuildId) .
+        echo "##vso[task.setvariable variable=IMAGE_TAG]miapp:$(Build.BuildId)"
+      failOnStderr: false
+
+  - task: Bash@3
+    name: "Run_Docker_image"
+    inputs:
+      targetType: 'inline'
+      script: |
+        docker rm -f miapp-container || true
+        docker run --name miapp-container --network quarkus-net -p 8080:8080 -d miapp:$(Build.BuildId)
+      failOnStderr: false
+      
+      
+  - task: Bash@3
+    name: "Get_Container_Ip"
+    inputs:
+      targetType: 'inline'
+      script: |
+        CONTAINER_IP=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' miapp-container)
+        echo "##vso[task.setvariable variable=CONTAINER_IP]$CONTAINER_IP"
+  
+  - task: Bash@3
+    name: "Create_K6_Test_File"
+    inputs:
+      targetType: 'inline'
+      script: |
+        tee k6-test.js <<EOF
+        import http from 'k6/http';
+        import { check, sleep } from 'k6';
+
+        export const options = {
+          stages: [
+            { duration: '10s', target: 15 }, // Ramp up to 15 VUs in 10s
+            { duration: '20s', target: 15 }, // Stay at 15 VUs for 20s
+            { duration: '10s', target: 0 },  // Ramp down to 0 VUs in 10s
+          ],
+          thresholds: {
+            http_req_duration: ['p(95)<250'], // 95% of requests should complete within 250ms
+          },
+        };
+
+        export default function () {
+          const url = 'http://$(CONTAINER_IP):8080/customers/list-all';
+          const params = { headers: { 'accept': 'application/json' } };
+          const payload = ''; // Empty payload as per your API request
+
+          const res = http.post(url, payload, params);
+
+          check(res, {
+            'is status 200': (r) => r.status === 200,
+          });
+
+          sleep(1); // Wait 1s between iterations
+        }
+        EOF
+
+  - task: k6-load-test@0
+    inputs:
+      filename: 'k6-test.js'
